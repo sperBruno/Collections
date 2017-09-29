@@ -2,6 +2,8 @@ public class BinarySearchTree<E extends Comparable<E>> {
     protected Node root = null;
     private Node findNode = null;
     private int depthValue = -1;
+    private int heightLeftValue = 0;
+    private int heightRightValue = 0;
     private boolean existsValue = false;
 
     protected void visit(Node n) {
@@ -108,32 +110,18 @@ public class BinarySearchTree<E extends Comparable<E>> {
         }
         return this.findNode;
 
-//	return findNode(root, val);
-
     }
 
-//    private Node findNode(Node n, E val) {
-//        System.out.println("Value: " + val);
-//        if (n == null || val == null) return null;
-//
-//        if (n.value.equals(val)) {
-//            return n;
-//        } else if (n.value.compareTo(val) > 0) {
-//            return findNode(n.leftChild, val);
-//        } else {
-//            return findNode(n.rightChild, val);
-//        }
-//    }
     // Method #2.
     protected int depth(E val) {
 
-		if(val != null) {
-		    this.depthValue = 0;
-		    existsValue = contains(val);
-            if(this.existsValue == false && this.depthValue>0){
+        if (val != null) {
+            this.depthValue = 0;
+            existsValue = contains(val);
+            if (this.existsValue == false && this.depthValue > 0) {
                 this.depthValue = -1;
             }
-		    return this.depthValue;
+            return this.depthValue;
         }
 
 
@@ -144,10 +132,38 @@ public class BinarySearchTree<E extends Comparable<E>> {
     // Method #3.
     protected int height(E val) {
 
-		if (val == null || !contains(val)) {return -1;}
+        if (val == null || contains(val) == false) {
+            System.out.println("null or does not contains");
+            return -1;
+        }
 
-        return -2; // this line is here only so this code will compile if you don't modify it
 
+//        System.out.println(depthValue);
+//        System.out.println(existsValue);
+
+        return height(this.root, val); // this line is here only so this code will compile if you don't modify it
+
+    }
+
+    private int height(Node n, E val) {
+        if(n != null && n.rightChild == null && n.leftChild == null){
+            System.out.println("REtun 0");
+            return 0;
+        }else{
+            if (n.leftChild != null)
+            {   this.heightLeftValue++;
+                height(n.leftChild, val);
+            }
+            if (n.rightChild!=null ){
+                this.heightRightValue++;
+                height(n.rightChild, val);
+            }
+        }
+
+
+        System.out.println("Left: "+ this.heightLeftValue);
+        System.out.println("Right: "+ this.heightRightValue);
+        return this.heightRightValue < this.heightLeftValue ? this.heightLeftValue:this.heightRightValue;
     }
 
     // Method #4.
