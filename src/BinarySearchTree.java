@@ -4,6 +4,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
     private int depthValue = -1;
     private int heightLeftValue = 0;
     private int heightRightValue = 0;
+    private int level = 0;
     private boolean existsValue = false;
 
     protected void visit(Node n) {
@@ -13,7 +14,13 @@ public class BinarySearchTree<E extends Comparable<E>> {
     public boolean contains(E val) {
         return contains(root, val);
     }
-
+    public void display(Node root){
+        if(root!=null){
+            display(root.leftChild);
+            System.out.print(" " + root.value);
+            display(root.rightChild);
+        }
+    }
     protected boolean contains(Node n, E val) {
         if (n == null) return this.existsValue;
 
@@ -48,6 +55,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
         } else if (cmp < 0) {
             if (n.leftChild == null) {
                 n.leftChild = new Node(val);
+                level++;
                 return true;
             } else {
                 return add(n.leftChild, val);
@@ -55,6 +63,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
         } else {
             if (n.rightChild == null) {
                 n.rightChild = new Node(val);
+                level++;
                 return true;
             } else {
                 return add(n.rightChild, val);
@@ -105,16 +114,16 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     // Method #1.
     public Node findNode(E val) {
+        ///root needs to initialized
         if (val != null) {
             contains(val);
         }
         return this.findNode;
-
     }
 
     // Method #2.
     protected int depth(E val) {
-
+        /// add counter in add method or contains method
         if (val != null) {
             this.depthValue = 0;
             existsValue = contains(val);
@@ -131,14 +140,13 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     // Method #3.
     protected int height(E val) {
-
+        ///
         if (val == null || contains(val) == false) {
             System.out.println("null or does not contains");
             return -1;
         }
-
-
-//        System.out.println(depthValue);
+        display(root);
+        System.out.println("Level of tree: "+ level);
 //        System.out.println(existsValue);
 
         return height(this.root, val); // this line is here only so this code will compile if you don't modify it
@@ -146,10 +154,11 @@ public class BinarySearchTree<E extends Comparable<E>> {
     }
 
     private int height(Node n, E val) {
-        if(n != null && n.rightChild == null && n.leftChild == null){
-            System.out.println("REtun 0");
-            return 0;
-        }else{
+//        if(n != null && val == n.value && n.rightChild == null && n.leftChild == null){
+//            System.out.println("REtun 0");
+//            this.heightLeftValue=0;
+//            this.heightRightValue=0;
+//        }else{
             if (n.leftChild != null)
             {   this.heightLeftValue++;
                 height(n.leftChild, val);
@@ -158,7 +167,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
                 this.heightRightValue++;
                 height(n.rightChild, val);
             }
-        }
+//        }
 
 
         System.out.println("Left: "+ this.heightLeftValue);
@@ -184,7 +193,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     }
 
-    class Node {
+    public class Node {
         E value;
         Node leftChild = null;
         Node rightChild = null;
