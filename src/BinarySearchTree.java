@@ -4,7 +4,8 @@ public class BinarySearchTree<E extends Comparable<E>> {
     private int depthValue = -1;
     private int heightLeftValue = 0;
     private int heightRightValue = 0;
-    private int level = 0;
+    private int levelLeft = 0;
+    private int levelRight = 0;
     private boolean existsValue = false;
 
     protected void visit(Node n) {
@@ -55,7 +56,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
         } else if (cmp < 0) {
             if (n.leftChild == null) {
                 n.leftChild = new Node(val);
-                level++;
+                levelLeft++;
                 return true;
             } else {
                 return add(n.leftChild, val);
@@ -63,7 +64,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
         } else {
             if (n.rightChild == null) {
                 n.rightChild = new Node(val);
-                level++;
+                levelRight++;
                 return true;
             } else {
                 return add(n.rightChild, val);
@@ -140,13 +141,13 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     // Method #3.
     protected int height(E val) {
-        ///
         if (val == null || contains(val) == false) {
             System.out.println("null or does not contains");
             return -1;
         }
         display(root);
-        System.out.println("Level of tree: "+ level);
+//        System.out.println("Level of l: "+ levelLeft);
+//        System.out.println("Level of r: "+ levelRight);
 //        System.out.println(existsValue);
 
         return height(this.root, val); // this line is here only so this code will compile if you don't modify it
@@ -154,33 +155,45 @@ public class BinarySearchTree<E extends Comparable<E>> {
     }
 
     private int height(Node n, E val) {
-//        if(n != null && val == n.value && n.rightChild == null && n.leftChild == null){
-//            System.out.println("REtun 0");
-//            this.heightLeftValue=0;
-//            this.heightRightValue=0;
-//        }else{
-            if (n.leftChild != null)
-            {   this.heightLeftValue++;
+        System.out.println("Level of l: "+ levelLeft);
+        System.out.println("Level of r: "+ levelRight);
+        if (n != null) {
+            if (depth(val) == 1) {
+//                System.out.println("asdasd");
+                return 0;
+            }
+            if (n.leftChild != null) {
+                this.heightLeftValue++;
                 height(n.leftChild, val);
             }
-            if (n.rightChild!=null ){
+            if (n.rightChild != null) {
                 this.heightRightValue++;
                 height(n.rightChild, val);
             }
-//        }
+        }
 
-
-        System.out.println("Left: "+ this.heightLeftValue);
-        System.out.println("Right: "+ this.heightRightValue);
+//        System.out.println("Left: "+ this.heightLeftValue);
+//        System.out.println("Right: "+ this.heightRightValue);
         return this.heightRightValue < this.heightLeftValue ? this.heightLeftValue:this.heightRightValue;
+
     }
 
     // Method #4.
     protected boolean isBalanced(Node n) {
 
 		/* IMPLEMENT THIS METHOD! */
+		if (n == null || contains(n.value) == false) {
+		    return false;
+        }
 
-        return true; // this line is here only so this code will compile if you don't modify it
+//        int left = height(n.leftChild,n.value);
+//		int right = height(n.rightChild, n.value);
+//        System.out.println("l =" +left);
+//        System.out.println("r =" +right);
+//        boolean result = Math.abs((left - right)) <= 1;
+        boolean result = Math.abs((levelLeft - levelRight)) <= 1;
+        System.out.println(result);
+        return result; // this line is here only so this code will compile if you don't modify it
 
     }
 
@@ -188,8 +201,12 @@ public class BinarySearchTree<E extends Comparable<E>> {
     public boolean isBalanced() {
 
 		/* IMPLEMENT THIS METHOD! */
+		boolean treeBalanced = false;
+		if (isBalanced(root) ) {
+		    treeBalanced = true;
+        }
 
-        return false; // this line is here only so this code will compile if you don't modify it
+        return treeBalanced; // this line is here only so this code will compile if you don't modify it
 
     }
 
